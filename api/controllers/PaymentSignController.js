@@ -55,13 +55,12 @@ module.exports = {
       return res.feedback(ResultCode.ERR_MEMO_INVALID.code, {}, ResultCode.ERR_MEMO_INVALID.msg);
     }
 
-    let tx = formatTransfer(currency, amount, address, to, issuer, memo);
-
     try {
+      let tx = formatTransfer(currency, amount, address, to, issuer, memo);
+      tx.Sequence = sequence;
       let sign = localSign(tx, {
         seed: secret
       });
-      tx.Sequence = sequence;
       return res.feedback(ResultCode.OK_SIGN.code, { signature: sign }, ResultCode.OK_SIGN.msg);
     } catch (error) {
       sails.log.error(Constant.ROUTER_PAYMENT_SIGN + error);
